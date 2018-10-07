@@ -54,7 +54,7 @@
     https://www.getpostman.com/collections/9b5a2bc4c5ba9d5362d9
     ```     
 
-#### EUREKA APP API 
+#### EUREKA APP
 
 * Check Registered service in eureka from your browser.
     ```
