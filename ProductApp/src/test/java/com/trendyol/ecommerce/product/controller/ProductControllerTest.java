@@ -1,6 +1,7 @@
 package com.trendyol.ecommerce.product.controller;
 
 import com.google.gson.Gson;
+import com.trendyol.ecommerce.product.controller.error.ErrorController;
 import com.trendyol.ecommerce.product.model.request.ProductCreateRequest;
 import com.trendyol.ecommerce.product.model.response.ProductCreateResponse;
 import com.trendyol.ecommerce.product.service.ProductService;
@@ -33,6 +34,9 @@ public class ProductControllerTest {
 
     @MockBean
     private ProductService productService;
+
+    @MockBean
+    private ErrorController errorController;
 
     @Test
     public void createProductTest() throws Exception{

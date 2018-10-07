@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.trendyol.ecommerce.core.domain.Campaign;
 import com.trendyol.ecommerce.core.domain.Category;
 import com.trendyol.ecommerce.core.domain.DiscountType;
+import com.trendyol.ecommerce.discount.controller.error.ErrorController;
 import com.trendyol.ecommerce.discount.model.request.CampaignCreateRequest;
 import com.trendyol.ecommerce.discount.model.response.CampaignCreateResponse;
 import com.trendyol.ecommerce.discount.service.CampaignService;
@@ -37,6 +38,9 @@ public class CampaignControllerTest {
 
     @MockBean
     private CampaignService campaignService;
+
+    @MockBean
+    private ErrorController errorController;
 
     @Test
     public void createCampaignTest() throws Exception {

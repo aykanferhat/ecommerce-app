@@ -2,6 +2,7 @@ package com.trendyol.ecommerce.product.controller;
 
 import com.google.gson.Gson;
 import com.trendyol.ecommerce.core.domain.Category;
+import com.trendyol.ecommerce.product.controller.error.ErrorController;
 import com.trendyol.ecommerce.product.model.request.CategoryCreateRequest;
 import com.trendyol.ecommerce.product.model.response.CategoryCreateResponse;
 import com.trendyol.ecommerce.product.service.CategoryService;
@@ -32,6 +33,9 @@ public class CategoryControllerTest {
 
     @MockBean
     private CategoryService categoryService;
+
+    @MockBean
+    private ErrorController errorController;
 
     @Test
     public void createCategoryTest() throws Exception {

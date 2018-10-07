@@ -2,6 +2,7 @@ package com.trendyol.ecommerce.shoppingcart.controller;
 
 import com.google.gson.Gson;
 import com.trendyol.ecommerce.core.domain.ShoppingCart;
+import com.trendyol.ecommerce.shoppingcart.controller.error.ErrorController;
 import com.trendyol.ecommerce.shoppingcart.model.request.ShoppingCartCreateRequest;
 import com.trendyol.ecommerce.shoppingcart.model.response.ShoppingCartCreateResponse;
 import com.trendyol.ecommerce.shoppingcart.service.ShoppingCartService;
@@ -32,6 +33,9 @@ public class ShoppingCartControllerTest {
 
     @MockBean
     private ShoppingCartService shoppingCartService;
+
+    @MockBean
+    private ErrorController errorController;
 
     @Test
     public void createShoppingCartTest() throws Exception{
