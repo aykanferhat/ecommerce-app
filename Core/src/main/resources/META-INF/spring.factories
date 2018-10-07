@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.trendyol.ecommerce.core.configuration.CoreConfiguration,\
+com.trendyol.ecommerce.core.configuration.MessagesConfiguration

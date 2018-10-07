@@ -1,0 +1,63 @@
+
+server:
+  port: ${SERVER_PORT:8088}
+
+spring:
+  application:
+    name: @application.name@
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: ${SHOW_SQL:false}
+  datasource:
+    hikari:
+      pool-name: hikaridp
+      connection-timeout: 10000
+      maximum-pool-size: 10
+      driver-class-name: com.mysql.jdbc.Driver
+
+eureka:
+  instance:
+    preferIpAddress: true
+    leaseRenewalIntervalInSeconds: 2
+    leaseExpirationDurationInSeconds: 6
+    statusPageUrlPath: /info
+    healthCheckUrlPath: /health
+    metadataMap:
+      instanceId: ${spring.cloud.client.hostname}:${spring.application.name}:${spring.application.instance_id:${server.port}}
+  client:
+    registryFetchIntervalSeconds: 5
+    serviceUrl:
+      defaultZone: http://${EUREKA_HOST:localhost}:${EUREKA_PORT:8761}/eureka/
+---
+
+spring:
+  profiles: local
+  datasource:
+    hikari:
+      jdbc-url: ${DS_URL:jdbc:mysql://localhost:3306/trendyol_ecommerce?characterEncoding=UTF-8}
+      username: ${DS_USERNAME:root}
+      password: ${DS_PASSWORD:12345678}
+
+---
+
+spring:
+  profiles: dev
+  datasource:
+    hikari:
+      jdbc-url: ${DS_URL:jdbc}
+      username: ${DS_USERNAME}
+      password: ${DS_PASSWORD}
+
+---
+
+spring:
+  profiles: test
+  datasource:
+    hikari:
+      jdbc-url: ${DS_URL}
+      username: ${DS_USERNAME}
+      password: ${DS_PASSWORD}
+
+
+

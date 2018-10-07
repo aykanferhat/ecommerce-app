@@ -1,0 +1,74 @@
+version: '3'
+
+services:
+    db:
+      image: mysql
+      container_name: mysqldb
+      command: --default-authentication-plugin=mysql_native_password
+      restart: always
+      environment:
+        MYSQL_DATABASE: trendyol_ecommerce
+        MYSQL_ROOT_PASSWORD: 12345678
+      volumes:
+        - ./db:/var/lib/mysql
+      ports:
+        - "3306:3306"
+    phpmyadmin:
+      image: phpmyadmin/phpmyadmin
+      container_name: phpmyadmin
+      environment:
+        PMA_ARBITRARY: 1
+        MYSQL_ROOT_PASSWORD: 12345678
+      ports:
+        - "7070:80"
+    eureka-server:
+      image: ecommerce/eureka-server
+      container_name: eureka
+      environment:
+        EUREKA_HOST: eureka
+        EUREKA_PORT: 8761
+      ports:
+        - "8761:8761"
+    product:
+      image: ecommerce/product
+      container_name: product
+      environment:
+        SERVER_PORT: 9090
+        SHOW_SQL: 'false'
+        EUREKA_HOST: eureka
+        EUREKA_PORT: 8761
+        DS_URL: jdbc:mysql://mysqldb:3306/trendyol_ecommerce?characterEncoding=UTF-8
+        DS_USERNAME: root
+        DS_PASSWORD: 12345678
+      ports:
+        - "9090:9090"
+    discount:
+      image: ecommerce/discount
+      container_name: discount
+      environment:
+        SERVER_PORT: 8088
+        SHOW_SQL: 'false'
+        EUREKA_HOST: eureka
+        EUREKA_PORT: 8761
+        DS_URL: jdbc:mysql://mysqldb:3306/trendyol_ecommerce?characterEncoding=UTF-8
+        DS_USERNAME: root
+        DS_PASSWORD: 12345678
+      ports:
+        - "8088:8088"
+    shoppingcart:
+      image: ecommerce/shoppingcart
+      container_name: shoppingcart
+      environment:
+        SERVER_PORT: 8585
+        SHOW_SQL: 'false'
+        EUREKA_HOST: eureka
+        EUREKA_PORT: 8761
+        DS_URL: jdbc:mysql://mysqldb:3306/trendyol_ecommerce?characterEncoding=UTF-8
+        DS_USERNAME: root
+        DS_PASSWORD: 12345678
+      ports:
+        - "8585:8585"
+
+volumes:
+    db:
+      driver: "local"
