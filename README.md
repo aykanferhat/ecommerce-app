@@ -7,7 +7,7 @@
         
 - Second step
     ```
-    mvn clean install
+    mvn install
     ```
         
 - Third step
