@@ -112,7 +112,7 @@
     GET http://localhost:{{SHOPPINGCART_SERVICE_PORT}}/api/v1/shoppingCarts/{shoppingCartId}
     ```
     
-* Create Product
+* Add Item to ShoppingCart
     ```
     POST http://localhost:{{SHOPPINGCART_SERVICE_PORT}}/api/v1/shoppingCarts/{shoppingCartId}
        {
