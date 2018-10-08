@@ -2,7 +2,7 @@
 
 - First step
     ```
-    git clone https://github.com/aykanferhat/ecommerce.git
+    git clone https://github.com/aykanferhat/ecommerce-app.git
     ```
         
 - Second step
