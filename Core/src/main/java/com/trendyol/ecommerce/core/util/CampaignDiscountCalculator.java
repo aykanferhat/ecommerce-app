@@ -2,15 +2,14 @@ package com.trendyol.ecommerce.core.util;
 
 import com.trendyol.ecommerce.core.domain.Campaign;
 import com.trendyol.ecommerce.core.domain.Product;
-import com.trendyol.ecommerce.core.domain.ShoppingCartItem;
-import com.trendyol.ecommerce.core.entity.ShoppingCartItemEntity;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface CampaignDiscountCalculator {
 
-    void applyCampaignDiscount(ShoppingCartItem shoppingCartItem);
+    BigDecimal calculateDiscount(Product product, List<Campaign> campaigns);
 
-    void applyCampaignDiscount(ShoppingCartItemEntity shoppingCartItemEntity, Product product, List<Campaign> campaigns);
+    BigDecimal calculateTotalDisocunt(Product product, Integer quantity, List<Campaign> campaigns);
 
 }

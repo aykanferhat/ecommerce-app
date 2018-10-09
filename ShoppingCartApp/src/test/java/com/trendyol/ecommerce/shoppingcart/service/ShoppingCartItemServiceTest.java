@@ -7,7 +7,6 @@ import com.trendyol.ecommerce.core.domain.ShoppingCartItem;
 import com.trendyol.ecommerce.core.entity.ShoppingCartItemEntity;
 import com.trendyol.ecommerce.core.exception.BusinessException;
 import com.trendyol.ecommerce.core.util.CampaignDiscountCalculator;
-import com.trendyol.ecommerce.shoppingcart.calculator.ShoppingCartItemCalculator;
 import com.trendyol.ecommerce.shoppingcart.mapper.ShoppingCartItemMapper;
 import com.trendyol.ecommerce.shoppingcart.model.request.ShoppingCartItemCreateRequest;
 import com.trendyol.ecommerce.shoppingcart.model.response.ShoppingCartItemCreateResponse;
@@ -46,8 +45,6 @@ public class ShoppingCartItemServiceTest {
     @Mock
     private CampaignDiscountCalculator campaignDiscountCalculator;
     @Mock
-    private ShoppingCartItemCalculator shoppingCartItemCalculator;
-    @Mock
     private RestTemplate restTemplate;
     @InjectMocks
     private ShoppingCartItemServiceImpl shoppingCartItemService;
@@ -61,7 +58,9 @@ public class ShoppingCartItemServiceTest {
         Long shoppingCartId = 1L;
         Long productId = 1L;
 
-        Product product = Product.builder().build();
+        Product product = Product.builder()
+                .price(price)
+                .build();
 
         ShoppingCartItemEntity shoppingCartItemEntity = new ShoppingCartItemEntity();
 
@@ -81,8 +80,6 @@ public class ShoppingCartItemServiceTest {
                 any(HashMap.class)))
                 .thenReturn(responseEntityProduct);
 
-        BigDecimal cartItemTotalPrice = BigDecimal.valueOf(100);
-        when(shoppingCartItemCalculator.calculateShoppingCartItemTotalPrice(product.getPrice(), quantity)).thenReturn(cartItemTotalPrice);
 
         Campaign[] campaigns = new Campaign[0];
         ResponseEntity<Campaign[]> responseEntityCampaigns = mock(ResponseEntity.class);
@@ -215,10 +212,14 @@ public class ShoppingCartItemServiceTest {
         );
         List<ShoppingCartItem> shoppingCartItems = Lists.newArrayList(
                 ShoppingCartItem.builder().salePrice(BigDecimal.valueOf(200))
-                        .product(Product.builder().build())
+                        .product(Product.builder()
+                                .build())
+                        .price(BigDecimal.ONE)
                         .build(),
                 ShoppingCartItem.builder().salePrice(BigDecimal.valueOf(300))
-                        .product(Product.builder().build())
+                        .product(Product.builder()
+                                .build())
+                        .price(BigDecimal.ONE)
                         .build()
         );
 
@@ -234,17 +235,14 @@ public class ShoppingCartItemServiceTest {
                 ArgumentMatchers.<Class<Campaign[]>>any()))
                 .thenReturn(responseEntityCampaigns);
 
-
-        for (ShoppingCartItem shoppingCartItem: shoppingCartItems) {
-            doNothing().when(campaignDiscountCalculator).applyCampaignDiscount(shoppingCartItem);
-        }
+        when(campaignDiscountCalculator.calculateTotalDisocunt(any(), any(), any())).thenReturn(BigDecimal.ONE);
 
         //when
         List<ShoppingCartItem> foundShoppingCartItems = shoppingCartItemService.getShoppingCartItemsByCartId(shoppingCartId);
 
         //then
         assertEquals(shoppingCartItems.size(), foundShoppingCartItems.size());
-        verify(campaignDiscountCalculator, times(2)).applyCampaignDiscount(any());
+        verify(campaignDiscountCalculator, times(2)).calculateTotalDisocunt(any(), any(), any());
     }
 
 

@@ -25,5 +25,4 @@ public class ExceptionMessageMapper {
         errorResponse.setMessage(messageSource.getMessage(businessException.getBusinessFaultCode().getCode(), businessException.getParams(), Locale.getDefault()));
         return errorResponse;
     }
-
 }

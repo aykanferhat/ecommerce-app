@@ -21,8 +21,7 @@ public class ShoppingCartCalculatorTest {
 
     @Before
     public void setup(){
-        ShoppingCartItemCalculator shoppingCartItemCalculator = new ShoppingCartItemCalculator();
-        shoppingCartCalculator = new ShoppingCartCalculator(shoppingCartItemCalculator);
+        shoppingCartCalculator = new ShoppingCartCalculator();
     }
 
     @Test
@@ -62,7 +61,7 @@ public class ShoppingCartCalculatorTest {
 
 
         //when
-        BigDecimal foundTotalPrice = shoppingCartCalculator.calculateShoppingCartTotalPrice(shoppingCart);
+        BigDecimal foundTotalPrice = shoppingCartCalculator.calculateShoppingCartTotalPrice(shoppingCart.getShoppingCartItems());
 
         //then
         assertEquals(totalPrice, foundTotalPrice);

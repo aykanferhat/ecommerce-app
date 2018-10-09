@@ -81,6 +81,12 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- SPRING CLOUD HYSTRIX-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
+        </dependency>
+
         <!-- SPRING BOOT ACTUATOR-->
         <dependency>
             <groupId>org.springframework.boot</groupId>

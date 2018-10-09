@@ -42,4 +42,6 @@ public class CouponServiceImpl implements CouponService{
         List<CouponEntity> couponEntities = couponRepository.findByThresholdOrThresholdGreaterThan(totalPrice);
         return couponEntities.stream().findFirst().map(couponMapper::mapToDTO).orElse(null);
     }
+
+
 }

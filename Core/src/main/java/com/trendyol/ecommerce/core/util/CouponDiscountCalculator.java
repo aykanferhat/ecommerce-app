@@ -1,8 +1,10 @@
 package com.trendyol.ecommerce.core.util;
 
-import com.trendyol.ecommerce.core.domain.ShoppingCart;
+import com.trendyol.ecommerce.core.domain.Coupon;
+
+import java.math.BigDecimal;
 
 public interface CouponDiscountCalculator {
 
-    void applyCouponDiscount(ShoppingCart shoppingCart);
+    BigDecimal calculateCouponDiscount(Coupon coupon, BigDecimal price);
 }

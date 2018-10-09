@@ -7,7 +7,6 @@ import com.trendyol.ecommerce.core.domain.ShoppingCartItem;
 import com.trendyol.ecommerce.core.entity.ShoppingCartItemEntity;
 import com.trendyol.ecommerce.core.exception.BusinessException;
 import com.trendyol.ecommerce.core.util.CampaignDiscountCalculator;
-import com.trendyol.ecommerce.shoppingcart.calculator.ShoppingCartItemCalculator;
 import com.trendyol.ecommerce.shoppingcart.mapper.ShoppingCartItemMapper;
 import com.trendyol.ecommerce.shoppingcart.model.request.ShoppingCartItemCreateRequest;
 import com.trendyol.ecommerce.shoppingcart.model.response.ShoppingCartItemCreateResponse;
@@ -38,21 +37,17 @@ public class ShoppingCartItemServiceImpl implements ShoppingCartItemService {
     private final ShoppingCartItemRepository shoppingCartItemRepository;
     private final ShoppingCartItemMapper shoppingCartItemMapper;
     private final CampaignDiscountCalculator campaignDiscountCalculator;
-    private final ShoppingCartItemCalculator shoppingCartItemCalculator;
     private final RestTemplate restTemplate;
 
     @Override
     public ShoppingCartItemCreateResponse createShoppingCartItem(Long shoppingCartId, ShoppingCartItemCreateRequest shoppingCartItemCreateRequest) {
 
-        boolean existsShoppingCart = shoppingCartRepository.existsById(shoppingCartId);
-        if (!existsShoppingCart) {
-            throw new BusinessException(SHOPPING_CART_NOT_FOUND, shoppingCartId);
-        }
+        checkShoppinCartById(shoppingCartId);
         shoppingCartItemCreateRequest.setShoppingCartId(shoppingCartId);
 
         Long productId = shoppingCartItemCreateRequest.getProductId();
-        Integer quantity = shoppingCartItemCreateRequest.getQuantity();
 
+        Integer quantity = shoppingCartItemCreateRequest.getQuantity();
         ShoppingCartItemEntity shoppingCartItemEntity;
         Optional<ShoppingCartItemEntity> optionalShoppingCartItemEntity = shoppingCartItemRepository.findByShoppingCartIdAndProductId(shoppingCartId, productId);
         if (optionalShoppingCartItemEntity.isPresent()) {
@@ -61,22 +56,26 @@ public class ShoppingCartItemServiceImpl implements ShoppingCartItemService {
             shoppingCartItemEntity.setQuantity(quantity);
         } else {
             shoppingCartItemEntity = shoppingCartItemMapper.mapToEntity(shoppingCartItemCreateRequest);
+            shoppingCartItemEntity.setQuantity(quantity);
         }
-        Product product = getProductById(productId).orElseThrow(() -> new BusinessException(PRODUCT_NOT_FOUND, productId));
 
-        BigDecimal cartItemTotalPrice = shoppingCartItemCalculator.calculateShoppingCartItemTotalPrice(product.getPrice(), quantity);
+        Product product = getProductById(productId);
+
+        BigDecimal cartItemTotalPrice = product.getPrice().multiply(BigDecimal.valueOf(quantity));
         shoppingCartItemEntity.setPrice(cartItemTotalPrice);
 
-        List<Campaign> campaigns = getCampaignsByCategoryIdAndQuantity(product.getCategoryId(), shoppingCartItemCreateRequest.getQuantity());
+        List<Campaign> campaigns = getCampaignsByCategoryIdAndQuantity(product.getCategoryId(), quantity);
         if (!campaigns.isEmpty()) {
-            campaignDiscountCalculator.applyCampaignDiscount(shoppingCartItemEntity, product, campaigns);
+            applyCampaignsIfExists(shoppingCartItemEntity, product, campaigns);
         } else {
             shoppingCartItemEntity.setSalePrice(shoppingCartItemEntity.getPrice());
             shoppingCartItemEntity.setDiscount(BigDecimal.ZERO);
         }
+
         ShoppingCartItemEntity createdItem = shoppingCartItemRepository.save(shoppingCartItemEntity);
         return shoppingCartItemMapper.mapToCreateResponse(createdItem);
     }
+
 
     @Override
     public List<ShoppingCartItem> getShoppingCartItemsByCartId(Long shoppingCartId) {
@@ -89,18 +88,39 @@ public class ShoppingCartItemServiceImpl implements ShoppingCartItemService {
             List<Campaign> campaigns = getCampaignsByCategoryIdAndQuantity(shoppingCartItem.getProduct().getCategoryId(), shoppingCartItem.getQuantity());
             if (!campaigns.isEmpty()) {
                 shoppingCartItem.setCampaigns(campaigns);
-                campaignDiscountCalculator.applyCampaignDiscount(shoppingCartItem);
+                applyCampaignsIfExists(shoppingCartItem, campaigns);
             }
         }
         return shoppingCartItems;
     }
 
-    private Optional<Product> getProductById(Long productId) {
+    private void applyCampaignsIfExists(ShoppingCartItem shoppingCartItem, List<Campaign> campaigns) {
+        BigDecimal totalDiscountAmount = campaignDiscountCalculator.calculateTotalDisocunt(shoppingCartItem.getProduct(), shoppingCartItem.getQuantity(), campaigns);
+        shoppingCartItem.setDiscount(totalDiscountAmount);
+        BigDecimal salePrice = shoppingCartItem.getPrice().subtract(totalDiscountAmount);
+        shoppingCartItem.setSalePrice(salePrice);
+    }
+
+    private void applyCampaignsIfExists(ShoppingCartItemEntity shoppingCartItemEntity, Product product, List<Campaign> campaigns) {
+        BigDecimal totalDisocunt = campaignDiscountCalculator.calculateTotalDisocunt(product, shoppingCartItemEntity.getQuantity(), campaigns);
+        shoppingCartItemEntity.setDiscount(totalDisocunt);
+        BigDecimal salePrice = shoppingCartItemEntity.getPrice().subtract(totalDisocunt);
+        shoppingCartItemEntity.setSalePrice(salePrice);
+    }
+
+    private void checkShoppinCartById(Long shoppingCartId) {
+        boolean existsShoppingCart = shoppingCartRepository.existsById(shoppingCartId);
+        if (!existsShoppingCart) {
+            throw new BusinessException(SHOPPING_CART_NOT_FOUND, shoppingCartId);
+        }
+    }
+
+    private Product getProductById(Long productId) {
         try {
             Map<String, String> uriParams = Maps.newHashMap();
             uriParams.put("productId", String.valueOf(productId));
             ResponseEntity<Product> responseEntity = restTemplate.exchange("http://product/api/v1/products/{productId}", HttpMethod.GET, null, Product.class, uriParams);
-            return Optional.of(responseEntity.getBody());
+            return responseEntity.getBody();
         } catch (Exception exception) {
             throw new BusinessException(PRODUCT_NOT_FOUND, productId);
         }
@@ -110,8 +130,7 @@ public class ShoppingCartItemServiceImpl implements ShoppingCartItemService {
         URI uri = UriComponentsBuilder.fromUriString("http://discount/api/v1/campaigns/exists")
                 .queryParam("categoryId", String.valueOf(categoryId))
                 .queryParam("quantity", String.valueOf(quantity))
-                .build()
-                .toUri();
+                .build().toUri();
         ResponseEntity<Campaign[]> response = restTemplate.exchange(uri, HttpMethod.GET, null, Campaign[].class);
         return Lists.newArrayList(response.getBody());
     }

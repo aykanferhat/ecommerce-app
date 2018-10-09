@@ -3,7 +3,6 @@ package com.trendyol.ecommerce.shoppingcart.configuration;
 import com.trendyol.ecommerce.core.util.CampaignDiscountCalculator;
 import com.trendyol.ecommerce.core.util.CouponDiscountCalculator;
 import com.trendyol.ecommerce.shoppingcart.calculator.ShoppingCartCalculator;
-import com.trendyol.ecommerce.shoppingcart.calculator.ShoppingCartItemCalculator;
 import com.trendyol.ecommerce.shoppingcart.mapper.ShoppingCartItemMapper;
 import com.trendyol.ecommerce.shoppingcart.mapper.ShoppingCartMapper;
 import com.trendyol.ecommerce.shoppingcart.repository.ShoppingCartItemRepository;
@@ -23,7 +22,7 @@ public class ServiceConfiguration {
                                                    CouponDiscountCalculator couponDiscountCalculator,
                                                    ShoppingCartCalculator shoppingCartCalculator,
                                                    RestTemplate restTemplate) {
-        return new ShoppingCartServiceImpl(shoppingCartRepository, shoppingCartMapper, shoppingCartItemService, couponDiscountCalculator, shoppingCartCalculator, restTemplate);
+        return new ShoppingCartServiceImpl(shoppingCartRepository, shoppingCartMapper, shoppingCartItemService, shoppingCartCalculator, couponDiscountCalculator, restTemplate);
     }
 
     @Bean
@@ -31,9 +30,8 @@ public class ServiceConfiguration {
                                                            ShoppingCartItemRepository shoppingCartItemRepository,
                                                            ShoppingCartItemMapper shoppingCartItemMapper,
                                                            CampaignDiscountCalculator campaignDiscountCalculator,
-                                                           ShoppingCartItemCalculator shoppingCartItemCalculator,
                                                            RestTemplate restTemplate) {
-        return new ShoppingCartItemServiceImpl(shoppingCartRepository, shoppingCartItemRepository, shoppingCartItemMapper, campaignDiscountCalculator, shoppingCartItemCalculator, restTemplate);
+        return new ShoppingCartItemServiceImpl(shoppingCartRepository, shoppingCartItemRepository, shoppingCartItemMapper, campaignDiscountCalculator, restTemplate);
     }
 }
 

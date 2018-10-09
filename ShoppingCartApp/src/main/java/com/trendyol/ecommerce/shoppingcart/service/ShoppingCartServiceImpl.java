@@ -29,8 +29,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     private final ShoppingCartRepository shoppingCartRepository;
     private final ShoppingCartMapper shoppingCartMapper;
     private final ShoppingCartItemService shoppingCartItemService;
-    private final CouponDiscountCalculator couponDiscountCalculator;
     private final ShoppingCartCalculator shoppingCartCalculator;
+    private final CouponDiscountCalculator couponDiscountCalculator;
     private final RestTemplate restTemplate;
 
     @Override
@@ -53,13 +53,13 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         ShoppingCartEntity shoppingCartEntity = optionalShoppingCartEntity.get();
         ShoppingCart shoppingCart = shoppingCartMapper.mapToDTO(shoppingCartEntity);
 
-        List<ShoppingCartItem> shoppingCartItems = getShoppingCartItems(shoppingCart.getId());
+        List<ShoppingCartItem> shoppingCartItems = shoppingCartItemService.getShoppingCartItemsByCartId(shoppingCartId);
         shoppingCart.setShoppingCartItems(shoppingCartItems);
 
-        BigDecimal totalPrice = getTotalPrice(shoppingCart);
+        BigDecimal totalPrice = shoppingCartCalculator.calculateShoppingCartTotalPrice(shoppingCart.getShoppingCartItems());
         shoppingCart.setTotalPrice(totalPrice);
 
-        BigDecimal salePrice = getSalePrice(shoppingCart);
+        BigDecimal salePrice = shoppingCartCalculator.calculateShoppingCartSalePrice(shoppingCart.getShoppingCartItems());
         shoppingCart.setSalePrice(salePrice);
 
         Integer totalQuantity = getTotalQuantity(shoppingCart);
@@ -70,20 +70,17 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             Coupon coupon = optionalCoupon.get();
             shoppingCart.setCoupon(coupon);
             applyDiscountIfCouponExists(shoppingCart);
+        } else {
+            BigDecimal discount = totalPrice.subtract(salePrice);
+            shoppingCart.setDiscount(discount);
         }
         return shoppingCart;
     }
 
-    private List<ShoppingCartItem> getShoppingCartItems(Long shoppingCartId) {
-        return shoppingCartItemService.getShoppingCartItemsByCartId(shoppingCartId);
-    }
-
-    private BigDecimal getTotalPrice(ShoppingCart shoppingCart) {
-        return shoppingCartCalculator.calculateShoppingCartTotalPrice(shoppingCart);
-    }
-
-    private BigDecimal getSalePrice(ShoppingCart shoppingCart) {
-        return shoppingCartCalculator.calculateShoppingCartSalePrice(shoppingCart);
+    private Optional<Coupon> getCouponByTotalPrice(BigDecimal totalPrice) {
+        URI uri = UriComponentsBuilder.fromUriString("http://discount/api/v1/coupons/thresholdFilter").queryParam("price", String.valueOf(totalPrice)).build().toUri();
+        ResponseEntity<Coupon> response = restTemplate.exchange(uri, HttpMethod.GET, null, Coupon.class);
+        return Optional.ofNullable(response.getBody());
     }
 
     private Integer getTotalQuantity(ShoppingCart shoppingCart) {
@@ -93,18 +90,20 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                 .sum();
     }
 
-    private Optional<Coupon> getCouponByTotalPrice(BigDecimal totalPrice) {
-        URI uri = UriComponentsBuilder.fromUriString("http://discount/api/v1/coupons/thresholdFilter").queryParam("price", String.valueOf(totalPrice)).build().toUri();
-        ResponseEntity<Coupon> response = restTemplate.exchange(uri, HttpMethod.GET, null, Coupon.class);
-        return Optional.ofNullable(response.getBody());
-    }
-
-    private void applyDiscountIfCouponExists(ShoppingCart shoppingCart) {
-        couponDiscountCalculator.applyCouponDiscount(shoppingCart);
-    }
-
     private boolean existsUser(Long userId) {
         // request account-service, default true.
         return userId != null;
+    }
+
+    private void applyDiscountIfCouponExists(ShoppingCart shoppingCart) {
+        Coupon coupon = shoppingCart.getCoupon();
+
+        BigDecimal discount = couponDiscountCalculator.calculateCouponDiscount(coupon, shoppingCart.getSalePrice());
+
+        BigDecimal totalDiscount = shoppingCart.getTotalPrice().subtract(shoppingCart.getSalePrice()).add(discount);
+        shoppingCart.setDiscount(totalDiscount);
+
+        BigDecimal totalSale = shoppingCart.getTotalPrice().subtract(totalDiscount);
+        shoppingCart.setSalePrice(totalSale);
     }
 }

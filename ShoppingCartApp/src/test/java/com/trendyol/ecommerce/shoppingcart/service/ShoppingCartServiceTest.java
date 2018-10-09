@@ -92,16 +92,11 @@ public class ShoppingCartServiceTest {
 
         ShoppingCartEntity shoppingCartEntity = new ShoppingCartEntity();
         ShoppingCart shoppingCart = ShoppingCart.builder().build();
-        List<ShoppingCartItem> shoppingCartItems = Lists.newArrayList(
-                ShoppingCartItem.builder().quantity(10).build(),
-                ShoppingCartItem.builder().quantity(10).build()
-        );
 
         when(shoppingCartRepository.findById(shoppingCartId)).thenReturn(Optional.of(shoppingCartEntity));
         when(shoppingCartMapper.mapToDTO(shoppingCartEntity)).thenReturn(shoppingCart);
-        when(shoppingCartItemService.getShoppingCartItemsByCartId(shoppingCart.getId())).thenReturn(shoppingCartItems);
-        when(shoppingCartCalculator.calculateShoppingCartTotalPrice(shoppingCart)).thenReturn(BigDecimal.valueOf(100));
-        when(shoppingCartCalculator.calculateShoppingCartSalePrice(shoppingCart)).thenReturn(BigDecimal.valueOf(150));
+        when(shoppingCartCalculator.calculateShoppingCartTotalPrice(anyList())).thenReturn(BigDecimal.valueOf(100));
+        when(shoppingCartCalculator.calculateShoppingCartSalePrice(anyList())).thenReturn(BigDecimal.valueOf(150));
 
 
         ResponseEntity<Object> responseEntity = mock(ResponseEntity.class);
@@ -125,29 +120,34 @@ public class ShoppingCartServiceTest {
         Long shoppingCartId = 1L;
 
         ShoppingCartEntity shoppingCartEntity = new ShoppingCartEntity();
-        ShoppingCart shoppingCart = ShoppingCart.builder().build();
+        ShoppingCart shoppingCart = ShoppingCart.builder()
+                .totalPrice(BigDecimal.ONE)
+                .salePrice(BigDecimal.ONE)
+                .build();
         List<ShoppingCartItem> shoppingCartItems = Lists.newArrayList(
                 ShoppingCartItem.builder().quantity(10).build(),
                 ShoppingCartItem.builder().quantity(10).build()
         );
         Coupon coupon = Coupon.builder().build();
 
-        when(shoppingCartRepository.findById(shoppingCartId)).thenReturn(Optional.of(shoppingCartEntity));
-        when(shoppingCartMapper.mapToDTO(shoppingCartEntity)).thenReturn(shoppingCart);
-        when(shoppingCartItemService.getShoppingCartItemsByCartId(shoppingCart.getId())).thenReturn(shoppingCartItems);
-        when(shoppingCartCalculator.calculateShoppingCartTotalPrice(shoppingCart)).thenReturn(BigDecimal.valueOf(100));
-        when(shoppingCartCalculator.calculateShoppingCartSalePrice(shoppingCart)).thenReturn(BigDecimal.valueOf(150));
+        when(shoppingCartRepository.findById(shoppingCartId))
+                .thenReturn(Optional.of(shoppingCartEntity));
+
+        when(shoppingCartMapper.mapToDTO(shoppingCartEntity))
+                .thenReturn(shoppingCart);
+
+        when(shoppingCartCalculator.calculateShoppingCartTotalPrice(anyList()))
+                .thenReturn(BigDecimal.valueOf(100));
+
+        when(shoppingCartCalculator.calculateShoppingCartSalePrice(anyList()))
+                .thenReturn(BigDecimal.valueOf(150));
 
         ResponseEntity<Object> responseEntity = mock(ResponseEntity.class);
         // TODO write a new test case: What will be if down Product server
         when(responseEntity.getBody()).thenReturn(coupon);
         when(restTemplate.exchange(any(URI.class), any(HttpMethod.class), any(), ArgumentMatchers.<Class<Object>>any())).thenReturn(responseEntity);
 
-        doAnswer(invocation -> {
-            ShoppingCart cart = invocation.getArgument(0);
-            cart.setDiscount(BigDecimal.valueOf(50));
-            return cart;
-        }).when(couponDiscountCalculator).applyCouponDiscount(shoppingCart);
+        when(couponDiscountCalculator.calculateCouponDiscount(any(), any())).thenReturn(BigDecimal.valueOf(150));
 
         //when
         ShoppingCart foundShoppingCart = shoppingCartService.getShoppingCartById(shoppingCartId);
@@ -155,6 +155,6 @@ public class ShoppingCartServiceTest {
         //then
 
         assertEquals(BigDecimal.valueOf(100), foundShoppingCart.getTotalPrice());
-        assertEquals(BigDecimal.valueOf(50), foundShoppingCart.getDiscount());
+        assertEquals(BigDecimal.valueOf(100), foundShoppingCart.getDiscount());
     }
 }
