@@ -13,13 +13,12 @@
     <name>EurekaApp</name>
 
     <packaging>jar</packaging>
-    <groupId>com.trendyol.ecommerce</groupId>
+    <groupId>com.ecommerce</groupId>
     <artifactId>eureka-server</artifactId>
     <version>1.0.0-SNAPSHOT</version>
 
     <properties>
         <docker.file.prefix>ecommerce</docker.file.prefix>
-        <docker.mysql.name>mysqldb</docker.mysql.name>
         <application.name>${project.artifactId}</application.name>
         <application.version>${project.version}</application.version>
     </properties>

@@ -7,7 +7,7 @@ services:
       command: --default-authentication-plugin=mysql_native_password
       restart: always
       environment:
-        MYSQL_DATABASE: trendyol_ecommerce
+        MYSQL_DATABASE: ecommerce
         MYSQL_ROOT_PASSWORD: 12345678
       volumes:
         - ./db:/var/lib/mysql
@@ -37,7 +37,7 @@ services:
         SHOW_SQL: 'false'
         EUREKA_HOST: eureka
         EUREKA_PORT: 8761
-        DS_URL: jdbc:mysql://mysqldb:3306/trendyol_ecommerce?characterEncoding=UTF-8
+        DS_URL: jdbc:mysql://mysqldb:3306/ecommerce?characterEncoding=UTF-8
         DS_USERNAME: root
         DS_PASSWORD: 12345678
       ports:
@@ -50,7 +50,7 @@ services:
         SHOW_SQL: 'false'
         EUREKA_HOST: eureka
         EUREKA_PORT: 8761
-        DS_URL: jdbc:mysql://mysqldb:3306/trendyol_ecommerce?characterEncoding=UTF-8
+        DS_URL: jdbc:mysql://mysqldb:3306/ecommerce?characterEncoding=UTF-8
         DS_USERNAME: root
         DS_PASSWORD: 12345678
       ports:
@@ -63,7 +63,7 @@ services:
         SHOW_SQL: 'false'
         EUREKA_HOST: eureka
         EUREKA_PORT: 8761
-        DS_URL: jdbc:mysql://mysqldb:3306/trendyol_ecommerce?characterEncoding=UTF-8
+        DS_URL: jdbc:mysql://mysqldb:3306/ecommerce?characterEncoding=UTF-8
         DS_USERNAME: root
         DS_PASSWORD: 12345678
       ports:
