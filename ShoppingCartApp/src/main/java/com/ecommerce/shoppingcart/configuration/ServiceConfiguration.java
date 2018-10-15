@@ -11,7 +11,6 @@ import com.ecommerce.shoppingcart.service.ShoppingCartService;
 import com.ecommerce.shoppingcart.service.ShoppingCartServiceImpl;
 import com.ecommerce.core.util.CampaignDiscountCalculator;
 import com.ecommerce.core.util.CouponDiscountCalculator;
-import com.ecommerce.shoppingcart.service.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
@@ -26,7 +25,14 @@ public class ServiceConfiguration {
                                                    CouponDiscountCalculator couponDiscountCalculator,
                                                    ShoppingCartCalculator shoppingCartCalculator,
                                                    RestTemplate restTemplate) {
-        return new ShoppingCartServiceImpl(shoppingCartRepository, shoppingCartMapper, shoppingCartItemService, shoppingCartCalculator, couponDiscountCalculator, restTemplate);
+        return ShoppingCartServiceImpl.builder()
+                .shoppingCartRepository(shoppingCartRepository)
+                .shoppingCartMapper(shoppingCartMapper)
+                .shoppingCartItemService(shoppingCartItemService)
+                .shoppingCartCalculator(shoppingCartCalculator)
+                .couponDiscountCalculator(couponDiscountCalculator)
+                .restTemplate(restTemplate)
+                .build();
     }
 
     @Bean
@@ -35,7 +41,13 @@ public class ServiceConfiguration {
                                                            ShoppingCartItemMapper shoppingCartItemMapper,
                                                            CampaignDiscountCalculator campaignDiscountCalculator,
                                                            RestTemplate restTemplate) {
-        return new ShoppingCartItemServiceImpl(shoppingCartRepository, shoppingCartItemRepository, shoppingCartItemMapper, campaignDiscountCalculator, restTemplate);
+        return ShoppingCartItemServiceImpl.builder()
+                .shoppingCartItemMapper(shoppingCartItemMapper)
+                .campaignDiscountCalculator(campaignDiscountCalculator)
+                .restTemplate(restTemplate)
+                .shoppingCartItemRepository(shoppingCartItemRepository)
+                .shoppingCartRepository(shoppingCartRepository)
+                .build();
     }
 }
 

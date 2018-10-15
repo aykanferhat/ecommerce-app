@@ -11,7 +11,7 @@ import com.ecommerce.shoppingcart.repository.ShoppingCartRepository;
 import com.ecommerce.core.entity.ShoppingCartEntity;
 import com.ecommerce.core.exception.BusinessException;
 import com.ecommerce.core.util.CouponDiscountCalculator;
-import lombok.RequiredArgsConstructor;
+import lombok.Builder;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
@@ -25,7 +25,7 @@ import java.util.Optional;
 import static com.ecommerce.core.exception.faultCode.ShoppingCartFaultCode.SHOPPING_CART_NOT_FOUND;
 import static com.ecommerce.core.exception.faultCode.UserFaultCode.USER_NOT_FOUND;
 
-@RequiredArgsConstructor
+@Builder
 public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     private final ShoppingCartRepository shoppingCartRepository;
