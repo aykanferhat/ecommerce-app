@@ -19,7 +19,7 @@ import static springfox.documentation.builders.PathSelectors.regex;
 public class SwaggerConfiguration {
 
     @Bean
-    public Docket shoppingCartApi(){
+    public Docket productApi(){
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()

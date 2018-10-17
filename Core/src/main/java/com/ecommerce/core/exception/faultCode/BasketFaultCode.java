@@ -5,9 +5,9 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum  ShoppingCartFaultCode implements BusinessFaultCode {
+public enum BasketFaultCode implements BusinessFaultCode {
 
-    SHOPPING_CART_NOT_FOUND("error.rest.shopping.cart.not.found.message")
+    BASKET_NOT_FOUND("error.rest.basket.cart.not.found.message")
 
     ;
     private final String code;

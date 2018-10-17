@@ -45,7 +45,7 @@
                     <verbose>true</verbose>
                     <images>
                         <image>
-                            <name>${parent.artifactId}/${project.artifactId}</name>
+                            <name>ecommerce/${project.artifactId}</name>
                             <build>
                                 <dockerFileDir>${project.basedir}/target/dockerfile/</dockerFileDir>
                                 <!--copies artficact to docker build dir in target-->

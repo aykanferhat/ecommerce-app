@@ -61,9 +61,9 @@ services:
         - "8088:8088"
       depends_on:
         - db
-    shoppingcart:
-      image: ecommerce/shoppingcart
-      container_name: shoppingcart
+    basket:
+      image: ecommerce/basket
+      container_name: basket
       environment:
         SERVER_PORT: 8585
         SHOW_SQL: 'false'

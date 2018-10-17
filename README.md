@@ -24,7 +24,7 @@
     | EurekaApp      |  `8761`      |
     | ProductApp     |  `9090`      |
     | DiscountApp    |  `8088`      |
-    | ShoppingCartApp|  `8585`      |
+    | BasketApp|  `8585`      |
 
 - You can change default ports in docker-compose.yml if you wish. 
 
@@ -40,9 +40,9 @@
     ```
 * Discount App 
     ```
-    http://localhost:{{SHOPPINGCART_SERVICE_PORT}}/swagger-ui.html
+    http://localhost:{{BASKET_SERVICE_PORT}}/swagger-ui.html
     ```
-* ShoppingCart App 
+* Basket App 
     ```
     http://localhost:{{DISCOUNT_SERVICE_PORT}}/swagger-ui.html
     ```
@@ -97,24 +97,24 @@
     ```
 
 
-#### SHOPPING CART APP API
+#### BASKET APP API
 
-* Create ShoppingCart
+* Create Basket
     ```
-    POST http://localhost:{{SHOPPINGCART_SERVICE_PORT}}/api/v1/shoppingCarts
+    POST http://localhost:{{BASKET_SERVICE_PORT}}/api/v1/baskets
         {
         	"userId":1
         }
     ```
     
-* Get ShoppingCart by Id
+* Get Basket by Id
     ```
-    GET http://localhost:{{SHOPPINGCART_SERVICE_PORT}}/api/v1/shoppingCarts/{shoppingCartId}
+    GET http://localhost:{{BASKET_SERVICE_PORT}}/api/v1/baskets/{basketId}
     ```
     
-* Add Item to ShoppingCart
+* Add Item to Basket
     ```
-    POST http://localhost:{{SHOPPINGCART_SERVICE_PORT}}/api/v1/shoppingCarts/{shoppingCartId}
+    POST http://localhost:{{BASKET_SERVICE_PORT}}/api/v1/baskets/{basketId}
        {
        	"productId":1,
        	"quantity":1

@@ -9,9 +9,9 @@
 
     <modules>
         <module>Core</module>
+        <module>BasketApp</module>
         <module>ProductApp</module>
         <module>DiscountApp</module>
-        <module>ShoppingCartApp</module>
         <module>EurekaServer</module>
     </modules>
     <packaging>pom</packaging>

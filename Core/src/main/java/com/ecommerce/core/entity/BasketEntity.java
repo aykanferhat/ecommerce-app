@@ -9,8 +9,8 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(schema = "ecommerce", name = "shopping_cart")
-public class ShoppingCartEntity {
+@Table(schema = "ecommerce", name = "basket")
+public class BasketEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

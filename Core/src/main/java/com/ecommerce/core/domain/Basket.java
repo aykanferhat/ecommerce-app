@@ -11,7 +11,7 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
-public class ShoppingCart {
+public class Basket {
 
     private Long id;
     private Date creationDate;
@@ -20,6 +20,6 @@ public class ShoppingCart {
     private BigDecimal salePrice;
     private BigDecimal discount;
     private Integer totalQuantity;
-    private List<ShoppingCartItem> shoppingCartItems;
+    private List<BasketItem> basketItems;
     private Coupon coupon;
 }

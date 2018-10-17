@@ -11,9 +11,9 @@
 
     <packaging>jar</packaging>
 
-    <name>ShoppingCartApp</name>
+    <name>BasketApp</name>
 
-    <artifactId>shoppingcart</artifactId>
+    <artifactId>basket</artifactId>
     <version>1.0.0-SNAPSHOT</version>
 
     <properties>
@@ -46,7 +46,7 @@
                     <verbose>true</verbose>
                     <images>
                         <image>
-                            <name>${parent.artifactId}/${project.artifactId}</name>
+                            <name>ecommerce/${project.artifactId}</name>
                             <build>
                                 <dockerFileDir>${project.basedir}/target/dockerfile/</dockerFileDir>
                                 <!--copies artficact to docker build dir in target-->

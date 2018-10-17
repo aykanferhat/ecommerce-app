@@ -4,13 +4,14 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(schema = "ecommerce", name = "shopping_cart_item")
-public class ShoppingCartItemEntity {
+@Table(schema = "ecommerce", name = "basket_item")
+public class BasketItemEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,8 +30,8 @@ public class ShoppingCartItemEntity {
     @Column(name = "total_quantity", nullable = false)
     private Integer quantity;
 
-    @Column(name = "shopping_cart_id", nullable = false)
-    private Long shoppingCartId;
+    @Column(name = "basket_id", nullable = false)
+    private Long basketId;
 
     @Column(name = "product_id", nullable = false)
     private Long productId;
@@ -38,5 +39,8 @@ public class ShoppingCartItemEntity {
     @MapsId(value = "productId")
     @OneToOne
     private ProductEntity product;
+
+
+    private List<BasketItemCampaign> basketItemCampaigns;
 
 }

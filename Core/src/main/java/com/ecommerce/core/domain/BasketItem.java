@@ -10,7 +10,7 @@ import java.util.List;
 @Setter
 @Getter
 @Builder
-public class ShoppingCartItem {
+public class BasketItem {
 
     private Long id;
     private BigDecimal salePrice;

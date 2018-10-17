@@ -65,7 +65,7 @@
                     <verbose>true</verbose>
                     <images>
                         <image>
-                            <name>${docker.file.prefix}/${project.artifactId}</name>
+                            <name>ecommerce/${project.artifactId}</name>
                             <alias>eureka-server</alias>
                             <build>
                                 <dockerFileDir>${project.basedir}/target/dockerfile/</dockerFileDir>
