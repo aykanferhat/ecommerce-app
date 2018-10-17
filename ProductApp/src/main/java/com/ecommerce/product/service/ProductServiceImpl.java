@@ -7,14 +7,14 @@ import com.ecommerce.core.domain.Product;
 import com.ecommerce.core.entity.ProductEntity;
 import com.ecommerce.core.exception.BusinessException;
 import com.ecommerce.product.repository.ProductRepository;
-import lombok.RequiredArgsConstructor;
+import lombok.Builder;
 
 import java.util.Optional;
 
 import static com.ecommerce.core.exception.faultCode.CategoryFaultCode.CATEGORY_NOT_FOUND;
 import static com.ecommerce.core.exception.faultCode.ProductFaultCode.PRODUCT_NOT_FOUND;
 
-@RequiredArgsConstructor
+@Builder
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;

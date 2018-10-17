@@ -21,6 +21,8 @@ services:
         MYSQL_ROOT_PASSWORD: 12345678
       ports:
         - "7070:80"
+      depends_on:
+        - db
     eureka-server:
       image: ecommerce/eureka-server
       container_name: eureka
@@ -42,6 +44,8 @@ services:
         DS_PASSWORD: 12345678
       ports:
         - "9090:9090"
+      depends_on:
+        - db
     discount:
       image: ecommerce/discount
       container_name: discount
@@ -55,6 +59,8 @@ services:
         DS_PASSWORD: 12345678
       ports:
         - "8088:8088"
+      depends_on:
+        - db
     shoppingcart:
       image: ecommerce/shoppingcart
       container_name: shoppingcart
@@ -68,6 +74,8 @@ services:
         DS_PASSWORD: 12345678
       ports:
         - "8585:8585"
+      depends_on:
+        - db
 
 volumes:
     db:

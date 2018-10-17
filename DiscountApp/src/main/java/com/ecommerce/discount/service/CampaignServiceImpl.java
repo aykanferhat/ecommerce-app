@@ -8,7 +8,7 @@ import com.ecommerce.discount.mapper.CampaignMapper;
 import com.ecommerce.discount.model.request.CampaignCreateRequest;
 import com.ecommerce.discount.model.response.CampaignCreateResponse;
 import com.ecommerce.discount.repository.CampaignRepository;
-import lombok.RequiredArgsConstructor;
+import lombok.Builder;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
@@ -20,7 +20,7 @@ import java.util.Optional;
 import static com.ecommerce.core.exception.faultCode.CampaignFaultCode.CAMPAIGN_NOT_FOUND;
 import static com.ecommerce.core.exception.faultCode.CategoryFaultCode.CATEGORY_NOT_FOUND;
 
-@RequiredArgsConstructor
+@Builder
 public class CampaignServiceImpl implements CampaignService{
 
     private final CampaignRepository campaignRepository;
