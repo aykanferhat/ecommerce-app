@@ -12,7 +12,7 @@ import com.ecommerce.core.domain.ShoppingCartItem;
 import com.ecommerce.core.entity.ShoppingCartItemEntity;
 import com.ecommerce.core.exception.BusinessException;
 import com.ecommerce.core.util.CampaignDiscountCalculator;
-import lombok.RequiredArgsConstructor;
+import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.util.Lists;
 import org.springframework.http.HttpMethod;
@@ -30,7 +30,7 @@ import static com.ecommerce.core.exception.faultCode.ProductFaultCode.PRODUCT_NO
 import static com.ecommerce.core.exception.faultCode.ShoppingCartFaultCode.SHOPPING_CART_NOT_FOUND;
 
 @Slf4j
-@RequiredArgsConstructor
+@Builder
 public class ShoppingCartItemServiceImpl implements ShoppingCartItemService {
 
     private final ShoppingCartRepository shoppingCartRepository;

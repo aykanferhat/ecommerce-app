@@ -7,7 +7,7 @@ import com.ecommerce.core.domain.Coupon;
 import com.ecommerce.core.entity.CouponEntity;
 import com.ecommerce.core.exception.BusinessException;
 import com.ecommerce.discount.mapper.CouponMapper;
-import lombok.RequiredArgsConstructor;
+import lombok.Builder;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.Optional;
 
 import static com.ecommerce.core.exception.faultCode.CouponFaultCode.COUPON_NOT_FOUND;
 
-@RequiredArgsConstructor
+@Builder
 public class CouponServiceImpl implements CouponService{
 
     private final CouponRepository couponRepository;

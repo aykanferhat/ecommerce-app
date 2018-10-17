@@ -19,13 +19,20 @@ public class ServiceConfiguration {
     public CampaignService campaignService(CampaignRepository campaignRepository,
                                            CampaignMapper campaignMapper,
                                            RestTemplate restTemplate) {
-        return new CampaignServiceImpl(campaignRepository, campaignMapper, restTemplate);
+        return CampaignServiceImpl.builder()
+                .campaignMapper(campaignMapper)
+                .campaignRepository(campaignRepository)
+                .restTemplate(restTemplate)
+                .build();
     }
 
     @Bean
     public CouponService couponService(CouponRepository couponRepository,
                                        CouponMapper couponMapper) {
-        return new CouponServiceImpl(couponRepository, couponMapper);
+        return CouponServiceImpl.builder()
+                .couponMapper(couponMapper)
+                .couponRepository(couponRepository)
+                .build();
     }
 
 }

@@ -18,12 +18,19 @@ public class ServiceConfiguration {
     public ProductService productService(ProductRepository productRepository,
                                          CategoryService categoryService,
                                          ProductMapper productMapper) {
-        return new ProductServiceImpl(productRepository, categoryService, productMapper);
+        return ProductServiceImpl.builder()
+                .productMapper(productMapper)
+                .productRepository(productRepository)
+                .categoryService(categoryService)
+                .build();
     }
 
     @Bean
     public CategoryService categoryService(CategoryRepository categoryRepository,
                                            CategoryMapper categoryMapper) {
-        return new CategoryServiceImpl(categoryRepository, categoryMapper);
+        return CategoryServiceImpl.builder()
+                .categoryMapper(categoryMapper)
+                .categoryRepository(categoryRepository)
+                .build();
     }
 }

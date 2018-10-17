@@ -7,14 +7,13 @@ import com.ecommerce.product.repository.CategoryRepository;
 import com.ecommerce.core.domain.Category;
 import com.ecommerce.core.entity.CategoryEntity;
 import com.ecommerce.core.exception.BusinessException;
-import lombok.RequiredArgsConstructor;
+import lombok.Builder;
 
 import java.util.Optional;
 
 import static com.ecommerce.core.exception.faultCode.CategoryFaultCode.CATEGORY_NOT_FOUND;
 
-
-@RequiredArgsConstructor
+@Builder
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
