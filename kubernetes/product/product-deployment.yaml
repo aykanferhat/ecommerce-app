@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: product-service
+  labels:
+    app: product-service
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: product-service
+      labels:
+        app: product-service
+    spec:
+      containers:
+      - name: product-service
+        image: parent/product:1.0.0-SNAPSHOT
+        ports:
+          - containerPort: 9090
+        imagePullPolicy: IfNotPresent
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: product-service

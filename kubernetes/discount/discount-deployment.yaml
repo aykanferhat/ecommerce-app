@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: discount-service
+  labels:
+    app: discount-service
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: discount-service
+      labels:
+        app: discount-service
+    spec:
+      containers:
+      - name: discount-service
+        image: parent/discount:1.0.0-SNAPSHOT
+        env:
+          - name: "DS_URL"
+            value: "jdbc:mysql://mysql:3306/ecommerce?characterEncoding=UTF-8"
+          - name: "DS_USERNAME"
+            value: "root"
+          - name: "DS_PASSWORD"
+            value: "12345678"
+        ports:
+          - containerPort: 8088
+        imagePullPolicy: IfNotPresent
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: discount-service

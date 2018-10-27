@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shoppingcart-service
+  labels:
+    app: shoppingcart-service
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: shoppingcart-service
+      labels:
+        app: shoppingcart-service
+    spec:
+      containers:
+      - name: shoppingcart-service
+        image: parent/shoppingcart:1.0.0-SNAPSHOT
+        ports:
+          - containerPort: 8585
+        imagePullPolicy: IfNotPresent
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: shoppingcart-service

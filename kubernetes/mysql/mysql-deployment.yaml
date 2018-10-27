@@ -1,0 +1,38 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-service
+  labels:
+    app: mysql-service
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: mysql-service
+      labels:
+        app: mysql-service
+    spec:
+      containers:
+      - name: mysql-service
+        image: mysql
+        env:
+          - name: "MYSQL_DATABASE"
+            value: "ecommerce"
+          - name: "MYSQL_ROOT_PASSWORD"
+            value: "12345678"
+        ports:
+          - containerPort: 3306
+        volumeMounts:
+          - mountPath: "mysql/data"
+            name: mysql-persistent-storage
+        imagePullPolicy: IfNotPresent
+      volumes:
+        - name: mysql-persistent-storage
+          persistentVolumeClaim:
+            claimName: mysql-pv-claim
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: mysql-service
+
