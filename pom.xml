@@ -7,14 +7,16 @@
     <artifactId>parent</artifactId>
     <version>1.0.0-SNAPSHOT</version>
 
+    <packaging>pom</packaging>
+
     <modules>
         <module>Core</module>
-        <module>BasketApp</module>
-        <module>ProductApp</module>
-        <module>DiscountApp</module>
+        <module>CommonModel</module>
         <module>EurekaServer</module>
+        <module>Product</module>
+        <module>Discount</module>
+        <module>Basket</module>
     </modules>
-    <packaging>pom</packaging>
 
     <name>ECommerceApp</name>
     <description>ECommerce App</description>

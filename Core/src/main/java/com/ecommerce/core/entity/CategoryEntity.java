@@ -19,7 +19,7 @@ public class CategoryEntity {
     private Long id;
 
     @Column(name = "title", nullable = false)
-    private String title;
+    private String titleCode;
 
     @Column(name = "parent_category_id")
     private Long parentCategoryId;

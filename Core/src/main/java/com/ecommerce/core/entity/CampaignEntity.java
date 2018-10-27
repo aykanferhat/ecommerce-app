@@ -1,10 +1,11 @@
 package com.ecommerce.core.entity;
 
-import com.ecommerce.core.domain.DiscountType;
 import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
 
 @Entity
 @Data
@@ -18,16 +19,30 @@ public class CampaignEntity {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "category_id")
-    private Long categoryId;
+    @Column(name = "name")
+    private String name;
 
-    @Column(name = "threshold", nullable = false)
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "campaign_categories", schema = "ecommerce")
+    private List<Long> categoryIds;
+
+    @Column(name = "threshold")
     private Integer threshold;
 
-    @Column(name = "discount_type", nullable = false)
-    @Enumerated(value = EnumType.STRING)
-    private DiscountType discountType;
+    @Column(name = "discount_type")
+    private String discountType;
 
-    @Column(name = "discount", nullable = false)
+    @Column(name = "discount")
     private BigDecimal discount;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "start_date")
+    private Date startDate;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "end_date")
+    private Date endDate;
+
+    @Column(name = "enabled")
+    private boolean enabled;
 }

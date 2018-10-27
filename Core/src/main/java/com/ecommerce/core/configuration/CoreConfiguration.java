@@ -9,16 +9,6 @@ import org.springframework.context.annotation.Configuration;
 public class CoreConfiguration {
 
     @Bean
-    public CampaignDiscountCalculator campaignDiscountCalculator() {
-        return new CampaignDiscountCalculatorImpl();
-    }
-
-    @Bean
-    public CouponDiscountCalculator couponDiscountCalculator() {
-        return new CouponDiscountCalculatorImpl();
-    }
-
-    @Bean
     public ExceptionMessageMapper exceptionMessageMapper(MessageSource messageSource) {
         return new ExceptionMessageMapper(messageSource);
     }

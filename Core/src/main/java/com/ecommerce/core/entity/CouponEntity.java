@@ -1,5 +1,4 @@
 package com.ecommerce.core.entity;
-import com.ecommerce.core.domain.DiscountType;
 import lombok.*;
 
 import javax.persistence.*;
@@ -21,8 +20,7 @@ public class CouponEntity {
     private BigDecimal threshold;
 
     @Column(name = "discount_type", nullable = false)
-    @Enumerated(value = EnumType.STRING)
-    private DiscountType discountType;
+    private String discountType;
 
     @Column(name = "discount", nullable = false)
     private BigDecimal discount;

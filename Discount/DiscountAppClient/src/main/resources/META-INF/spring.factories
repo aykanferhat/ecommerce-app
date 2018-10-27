@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.ecommerce.discount.client.configuration.ClientConfiguration,\
+com.ecommerce.discount.client.configuration.WebConfiguration

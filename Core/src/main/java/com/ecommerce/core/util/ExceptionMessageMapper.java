@@ -1,7 +1,7 @@
 package com.ecommerce.core.util;
 
 import com.ecommerce.core.exception.BusinessException;
-import com.ecommerce.core.domain.ErrorResponse;
+import com.ecommerce.core.model.ErrorResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 
