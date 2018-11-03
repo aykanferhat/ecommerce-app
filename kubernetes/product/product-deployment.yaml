@@ -1,3 +1,4 @@
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -14,7 +15,17 @@ spec:
     spec:
       containers:
       - name: product-service
-        image: parent/product:1.0.0-SNAPSHOT
+        image: aykanferhat/product-service
+        env:
+          - name: "DS_URL"
+            value: "jdbc:mysql://mysql-service/ecommerce?characterEncoding=UTF-8"
+          - name: "DS_USERNAME"
+            value: "root"
+          - name: "DS_PASSWORD"
+            valueFrom:
+              secretKeyRef:
+                name: mysql-pass
+                key: password
         ports:
           - containerPort: 9090
         imagePullPolicy: IfNotPresent

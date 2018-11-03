@@ -15,12 +15,15 @@ spec:
     spec:
       containers:
       - name: mysql-service
-        image: mysql
+        image: mysql:5.7
         env:
           - name: "MYSQL_DATABASE"
             value: "ecommerce"
           - name: "MYSQL_ROOT_PASSWORD"
-            value: "12345678"
+            valueFrom:
+              secretKeyRef:
+                name: mysql-pass
+                key: password
         ports:
           - containerPort: 3306
         volumeMounts:

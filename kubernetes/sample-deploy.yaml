@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sample-app
+  labels:
+    app: sample-app
+spec:
+  replicas: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      name: sample-app
+      labels:
+        app: sample-app
+    spec:
+      containers:
+      - name: sample-app
+        image: gsengun/nodejs-demo-app:1.0.0
+        env:
+          - name: PORT
+            value: "80"
+        imagePullPolicy: IfNotPresent
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: sample-app

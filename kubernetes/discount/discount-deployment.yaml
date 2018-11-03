@@ -14,14 +14,17 @@ spec:
     spec:
       containers:
       - name: discount-service
-        image: parent/discount:1.0.0-SNAPSHOT
+        image: aykanferhat/discount-service
         env:
           - name: "DS_URL"
-            value: "jdbc:mysql://mysql:3306/ecommerce?characterEncoding=UTF-8"
+            value: "jdbc:mysql://mysql-service/ecommerce?characterEncoding=UTF-8"
           - name: "DS_USERNAME"
             value: "root"
           - name: "DS_PASSWORD"
-            value: "12345678"
+            valueFrom:
+              secretKeyRef:
+                name: mysql-pass
+                key: password
         ports:
           - containerPort: 8088
         imagePullPolicy: IfNotPresent
